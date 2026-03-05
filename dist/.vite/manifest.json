@@ -1,0 +1,61 @@
+{
+  "../../../../../@crx/manifest": {
+    "file": "assets/crx-manifest.js-D9Dy76yB.js",
+    "name": "crx-manifest.js",
+    "src": "../../../../../@crx/manifest",
+    "isEntry": true
+  },
+  "_TableToolbar-Q0NmP8mF.js": {
+    "file": "assets/TableToolbar-Q0NmP8mF.js",
+    "name": "TableToolbar",
+    "imports": [
+      "_index-CZUZrFEv.js"
+    ]
+  },
+  "_index-CZUZrFEv.js": {
+    "file": "assets/index-CZUZrFEv.js",
+    "name": "index",
+    "css": [
+      "assets/index-DzklgiXF.css"
+    ]
+  },
+  "_index-DzklgiXF.css": {
+    "file": "assets/index-DzklgiXF.css",
+    "src": "_index-DzklgiXF.css"
+  },
+  "src/background/service-worker.ts": {
+    "file": "assets/service-worker.ts-Ck4ZfVx7.js",
+    "name": "service-worker.ts",
+    "src": "src/background/service-worker.ts",
+    "isEntry": true
+  },
+  "src/pages/options/index.html": {
+    "file": "assets/options-QZFNUOVI.js",
+    "name": "options",
+    "src": "src/pages/options/index.html",
+    "isEntry": true,
+    "imports": [
+      "_index-CZUZrFEv.js"
+    ]
+  },
+  "src/pages/popup/index.html": {
+    "file": "assets/popup-aKTIzo1j.js",
+    "name": "popup",
+    "src": "src/pages/popup/index.html",
+    "isEntry": true,
+    "imports": [
+      "_index-CZUZrFEv.js",
+      "_TableToolbar-Q0NmP8mF.js"
+    ]
+  },
+  "src/pages/sidepanel/index.html": {
+    "file": "assets/sidepanel-CGr00WVO.js",
+    "name": "sidepanel",
+    "src": "src/pages/sidepanel/index.html",
+    "isEntry": true,
+    "imports": [
+      "_index-CZUZrFEv.js",
+      "_TableToolbar-Q0NmP8mF.js"
+    ]
+  }
+}

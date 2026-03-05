@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/* Force dark: variants to only apply when .dark class is present, not via system media query */
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-accent: #6366f1;
+  --row-height: 40px;
+}
+
+@theme inline {
+  --color-accent: var(--color-accent);
+}
+
+/* True black theme */
+.true-black {
+  background-color: #000;
+  color: #e5e7eb;
+}
+
+.true-black .dark\:bg-gray-900 {
+  background-color: #000;
+}
+
+.true-black .dark\:bg-gray-800\/80,
+.true-black .dark\:bg-gray-800 {
+  background-color: #111;
+}
+
+.true-black .dark\:bg-gray-700\/60,
+.true-black .dark\:bg-gray-700 {
+  background-color: #1a1a1a;
+}
+
+/* Cream theme — warm off-white */
+.cream {
+  background-color: #faf7f2;
+  color: #2c2820;
+}
+
+.cream .bg-white {
+  background-color: #faf7f2;
+}
+
+.cream .bg-gray-50 {
+  background-color: #f0ebe0;
+}
+
+.cream .bg-gray-100,
+.cream .hover\:bg-gray-100:hover,
+.cream .hover\:bg-gray-50:hover,
+.cream .hover\:bg-gray-50\/50:hover {
+  background-color: #e8e2d4;
+}
+
+.cream .border-gray-200 {
+  border-color: #d4cec0;
+}
+
+.cream .text-gray-800 {
+  color: #2c2820;
+}
+
+.cream .text-gray-700 {
+  color: #3d3830;
+}
+
+.cream .text-gray-600 {
+  color: #5a5448;
+}
+
+.cream .text-gray-500 {
+  color: #7a7060;
+}
+
+.cream .text-gray-400 {
+  color: #9a9080;
+}
+
+.cream ::-webkit-scrollbar-thumb {
+  background: #c8c0b0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}

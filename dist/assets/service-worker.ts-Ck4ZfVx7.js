@@ -1,0 +1,1 @@
+chrome.action.onClicked.addListener(e=>{e.id!==void 0&&chrome.sidePanel.open({tabId:e.id})});chrome.runtime.onInstalled.addListener(()=>{chrome.sidePanel.setPanelBehavior({openPanelOnActionClick:!0}),console.log("Tabby installed")});
