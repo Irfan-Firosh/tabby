@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -76,6 +76,14 @@ export function ColumnHeader({ column }: ColumnHeaderProps) {
 
   const isSelectEditor =
     openMenu?.type === 'select-editor' && openMenu.columnId === column.id;
+
+  // Recompute position whenever SelectOptionEditor opens (may not have gone through handleOpenMenu)
+  useEffect(() => {
+    if (isSelectEditor && thRef.current) {
+      const rect = thRef.current.getBoundingClientRect();
+      setMenuPos({ top: rect.bottom + 2, left: rect.left });
+    }
+  }, [isSelectEditor]);
 
   return (
     <th

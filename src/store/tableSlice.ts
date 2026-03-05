@@ -234,6 +234,7 @@ export const createTableSlice: StateCreator<TableSlice, [], [], TableSlice> = (
 
     newCols[overIdx] = { ...newCols[overIdx], order: newOrder };
     set({ columns: newCols });
-    await queries.reorderColumns(activeId, newOrder);
+    const tableId = get().activeTableId;
+    if (tableId) await queries.reorderColumns(activeId, newOrder, tableId);
   },
 });

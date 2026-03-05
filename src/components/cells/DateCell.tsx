@@ -12,7 +12,11 @@ export function DateCell({ value, isEditing, onStartEdit, onCommit, onCancel }: 
     }
   }, [isEditing, value]);
 
-  const displayValue = value ? new Date(String(value)).toLocaleDateString() : '';
+  const displayValue = (() => {
+    if (!value) return '';
+    const d = new Date(String(value));
+    return isNaN(d.getTime()) ? '' : d.toLocaleDateString();
+  })();
 
   if (!isEditing) {
     return (

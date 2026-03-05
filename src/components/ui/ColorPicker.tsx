@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { ACCENT_PRESETS } from '@/types/settings';
 
 interface ColorPickerProps {
@@ -6,6 +7,8 @@ interface ColorPickerProps {
 }
 
 export function ColorPicker({ value, onChange }: ColorPickerProps) {
+  const hexId = useId();
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
@@ -13,6 +16,8 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
           <button
             key={color}
             onClick={() => onChange(color)}
+            aria-label={`Select color ${color}`}
+            aria-pressed={value === color}
             className="h-6 w-6 rounded-full ring-offset-1 transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-accent"
             style={{
               backgroundColor: color,
@@ -23,8 +28,9 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
         ))}
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Hex:</span>
+        <label htmlFor={hexId} className="text-xs text-gray-500">Hex:</label>
         <input
+          id={hexId}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}

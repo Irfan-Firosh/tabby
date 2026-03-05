@@ -9,16 +9,18 @@ export async function loadTodos(): Promise<Todo[]> {
 }
 
 export async function addTodo(text: string): Promise<Todo> {
-  const count = await db.todos.count();
-  const todo: Todo = {
-    id: generateId(),
-    text,
-    done: false,
-    order: count,
-    createdAt: Date.now(),
-  };
-  await db.todos.add(todo);
-  return todo;
+  return db.transaction('rw', db.todos, async () => {
+    const count = await db.todos.count();
+    const todo: Todo = {
+      id: generateId(),
+      text,
+      done: false,
+      order: count,
+      createdAt: Date.now(),
+    };
+    await db.todos.add(todo);
+    return todo;
+  });
 }
 
 export async function toggleTodo(id: string, done: boolean): Promise<void> {
@@ -86,12 +88,17 @@ export async function reorderRows(
   tableId: string
 ) {
   const now = Date.now();
-  await db.rows.update(rowId, { order: newOrder, updatedAt: now });
-  await db.tablesStore.update(tableId, { updatedAt: now });
+  await db.transaction('rw', [db.rows, db.tablesStore], async () => {
+    await db.rows.update(rowId, { order: newOrder, updatedAt: now });
+    await db.tablesStore.update(tableId, { updatedAt: now });
+  });
 }
 
-export async function reorderColumns(columnId: string, newOrder: number) {
-  await db.columns.update(columnId, { order: newOrder });
+export async function reorderColumns(columnId: string, newOrder: number, tableId: string) {
+  await db.transaction('rw', [db.columns, db.tablesStore], async () => {
+    await db.columns.update(columnId, { order: newOrder });
+    await db.tablesStore.update(tableId, { updatedAt: Date.now() });
+  });
 }
 
 export async function addRow(tableId: string, order: number): Promise<Row> {
@@ -108,11 +115,11 @@ export async function addRow(tableId: string, order: number): Promise<Row> {
 }
 
 export async function deleteRow(rowId: string, tableId: string) {
-  await db.transaction('rw', [db.rows, db.cells], async () => {
+  await db.transaction('rw', [db.rows, db.cells, db.tablesStore], async () => {
     await db.rows.delete(rowId);
     await db.cells.where('rowId').equals(rowId).delete();
+    await db.tablesStore.update(tableId, { updatedAt: Date.now() });
   });
-  await db.tablesStore.update(tableId, { updatedAt: Date.now() });
 }
 
 export async function duplicateRow(rowId: string, tableId: string, order: number): Promise<Row> {
@@ -126,14 +133,13 @@ export async function duplicateRow(rowId: string, tableId: string, order: number
     updatedAt: now,
   };
 
-  const cells = await db.cells.where('rowId').equals(rowId).toArray();
-  const newCells: Cell[] = cells.map((c) => ({
-    ...c,
-    id: `${newRowId}_${c.columnId}`,
-    rowId: newRowId,
-  }));
-
   await db.transaction('rw', [db.rows, db.cells], async () => {
+    const cells = await db.cells.where('rowId').equals(rowId).toArray();
+    const newCells: Cell[] = cells.map((c) => ({
+      ...c,
+      id: `${newRowId}_${c.columnId}`,
+      rowId: newRowId,
+    }));
     await db.rows.add(newRow);
     await db.cells.bulkPut(newCells);
   });
@@ -173,11 +179,11 @@ export async function deleteTable(tableId: string) {
 }
 
 export async function deleteColumn(columnId: string, tableId: string) {
-  await db.transaction('rw', [db.columns, db.cells], async () => {
+  await db.transaction('rw', [db.columns, db.cells, db.tablesStore], async () => {
     await db.columns.delete(columnId);
     await db.cells.where('columnId').equals(columnId).delete();
+    await db.tablesStore.update(tableId, { updatedAt: Date.now() });
   });
-  await db.tablesStore.update(tableId, { updatedAt: Date.now() });
 }
 
 export async function importTable(

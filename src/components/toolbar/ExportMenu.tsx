@@ -22,7 +22,11 @@ export function ExportMenu({ onClose }: ExportMenuProps) {
   }, [onClose]);
 
   const copy = async (text: string) => {
-    await navigator.clipboard.writeText(text);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      console.error('Failed to copy to clipboard');
+    }
     onClose();
   };
 

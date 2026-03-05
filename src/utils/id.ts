@@ -8,7 +8,7 @@ export const generateId = () => nanoid(12);
  */
 export function orderBetween(a?: number, b?: number): number {
   if (a === undefined && b === undefined) return 1000;
-  if (a === undefined) return (b as number) / 2;
+  if (a === undefined) return (b as number) - 1000;
   if (b === undefined) return a + 1000;
   return (a + b) / 2;
 }

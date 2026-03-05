@@ -15,8 +15,7 @@ export function SelectOptionEditor({ columnId, onClose }: SelectOptionEditorProp
   const ref = useRef<HTMLDivElement>(null);
   const columns = useStore((s) => s.columns);
   const updateColumn = useStore((s) => s.updateColumn);
-  const column = columns.find((c) => c.id === columnId)!;
-  const options = column?.options ?? [];
+  const column = columns.find((c) => c.id === columnId);
 
   useEffect(() => {
     const handle = (e: MouseEvent) => {
@@ -30,6 +29,13 @@ export function SelectOptionEditor({ columnId, onClose }: SelectOptionEditorProp
       document.removeEventListener('keydown', handleKey);
     };
   }, [onClose]);
+
+  if (!column) {
+    onClose();
+    return null;
+  }
+
+  const options = column.options ?? [];
 
   const updateOptions = (opts: SelectOption[]) =>
     updateColumn(columnId, { options: opts });
@@ -83,6 +89,8 @@ export function SelectOptionEditor({ columnId, onClose }: SelectOptionEditorProp
                 <button
                   key={color}
                   onClick={() => updateOption(opt.id, { color })}
+                  aria-label={`Set color ${color}`}
+                  aria-pressed={opt.color === color}
                   className={`h-4 w-4 rounded ${bg} ${
                     opt.color === color ? 'ring-1 ring-offset-1 ring-gray-500' : ''
                   }`}

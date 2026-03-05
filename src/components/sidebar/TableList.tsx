@@ -23,7 +23,8 @@ export function TableList() {
     const name = file.name.replace(/\.csv$/i, '');
     const reader = new FileReader();
     reader.onload = (ev) => {
-      const text = ev.target?.result as string;
+      const text = ev.target?.result;
+      if (typeof text !== 'string') return;
       const { headers, rows } = parseCSV(text);
       if (headers.length > 0) importCSV(name, headers, rows);
     };

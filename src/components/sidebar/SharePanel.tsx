@@ -43,9 +43,12 @@ export function SharePanel({ onClose }: SharePanelProps) {
   };
 
   const handleCopyCSV = async () => {
-    const csv = exportToCSV(columns, rows, cells);
-    await navigator.clipboard.writeText(csv);
-    flashCopied('csv');
+    try {
+      await navigator.clipboard.writeText(exportToCSV(columns, rows, cells));
+      flashCopied('csv');
+    } catch {
+      console.error('Failed to copy to clipboard');
+    }
   };
 
   const handleEmail = () => {
@@ -58,9 +61,12 @@ export function SharePanel({ onClose }: SharePanelProps) {
   };
 
   const handleDiscord = async () => {
-    const md = exportToMarkdown(columns, rows, cells);
-    await navigator.clipboard.writeText(md);
-    flashCopied('discord');
+    try {
+      await navigator.clipboard.writeText(exportToMarkdown(columns, rows, cells));
+      flashCopied('discord');
+    } catch {
+      console.error('Failed to copy to clipboard');
+    }
   };
 
   if (!table) return null;
